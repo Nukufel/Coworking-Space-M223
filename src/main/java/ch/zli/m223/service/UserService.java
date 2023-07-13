@@ -8,38 +8,38 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import ch.zli.m223.model.ApplicationUser;
+import ch.zli.m223.model.User;
 
 @ApplicationScoped
-public class ApplicationUserService {
+public class UserService {
     @Inject
     EntityManager entityManager;
 
     @Transactional
-    public ApplicationUser createUser(ApplicationUser user) {
+    public User createUser(User user) {
         return entityManager.merge(user);
     }
 
     @Transactional
     public void deleteUser(Long id) {
-        var entity = entityManager.find(ApplicationUser.class, id);
+        var entity = entityManager.find(User.class, id);
         entityManager.remove(entity);
     }
 
     @Transactional
-    public ApplicationUser updateUser(Long id, ApplicationUser user) {
+    public User updateUser(Long id, User user) {
         user.setId(id);
         return entityManager.merge(user);
     }
 
-    public List<ApplicationUser> findAll() {
-        var query = entityManager.createQuery("FROM ApplicationUser", ApplicationUser.class);
+    public List<User> findAll() {
+        var query = entityManager.createQuery("FROM User", User.class);
         return query.getResultList();
     }
 
-    public Optional<ApplicationUser> findByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         return entityManager
-                .createNamedQuery("ApplicationUser.findByEmail", ApplicationUser.class)
+                .createNamedQuery("User.findByEmail", User.class)
                 .setParameter("email", email)
                 .getResultStream()
                 .findFirst();

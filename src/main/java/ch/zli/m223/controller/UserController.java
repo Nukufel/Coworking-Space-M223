@@ -18,17 +18,17 @@ import javax.ws.rs.core.MediaType;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-import ch.zli.m223.model.ApplicationUser;
-import ch.zli.m223.service.ApplicationUserService;
+import ch.zli.m223.model.User;
+import ch.zli.m223.service.UserService;
 
 
 @Path("/users")
 @Tag(name = "Users", description = "Handling of users")
 @RolesAllowed({ "User", "Admin" })
-public class ApplicationUserController {
+public class UserController {
   
   @Inject
-  ApplicationUserService userService;
+  UserService userService;
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
@@ -36,7 +36,7 @@ public class ApplicationUserController {
       summary = "Index all users.", 
       description = "Returns a list of all users."
   )
-  public List<ApplicationUser> index() {
+  public List<User> index() {
       return userService.findAll();
   }
 
@@ -48,7 +48,7 @@ public class ApplicationUserController {
       description = "Creates a new user and returns the newly added user."
   )
   @PermitAll
-  public ApplicationUser create(ApplicationUser user) {
+  public User create(User user) {
      return userService.createUser(user);
   }
 
@@ -68,7 +68,7 @@ public class ApplicationUserController {
       summary = "Updates an user.",
       description = "Updates an user by its id."
   )
-  public ApplicationUser update(@PathParam("id") Long id, ApplicationUser user) {
+  public User update(@PathParam("id") Long id, User user) {
       return userService.updateUser(id, user);
   }
 }

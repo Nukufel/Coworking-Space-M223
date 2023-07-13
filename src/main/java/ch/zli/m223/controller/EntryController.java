@@ -18,44 +18,44 @@ import javax.ws.rs.core.MediaType;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-import ch.zli.m223.model.Entry;
-import ch.zli.m223.service.EntryService;
+import ch.zli.m223.model.Buchung;
+import ch.zli.m223.service.BuchungService;
 
 @Path("/entries")
 @Tag(name = "Entries", description = "Handling of entries")
 @RolesAllowed({ "User", "Admin" })
-public class EntryController {
+public class BuchungController {
 
     @Inject
-    EntryService entryService;
+    BuchungService buchungService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Index all entries.", description = "Returns a list of all entries.")
-    public List<Entry> index() {
-        return entryService.findAll();
+    public List<Buchung> index() {
+        return buchungService.findAll();
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Creates a new entry.", description = "Creates a new entry and returns the newly added entry.")
-    public Entry create(@Valid Entry entry) {
-        return entryService.createEntry(entry);
+    @Operation(summary = "Creates a new buchung.", description = "Creates a new buchung and returns the newly added buchung.")
+    public Buchung create(@Valid Buchung buchung) {
+        return buchungService.createBuchung(buchung);
     }
 
     @Path("/{id}")
     @DELETE
-    @Operation(summary = "Deletes an entry.", description = "Deletes an entry by its id.")
+    @Operation(summary = "Deletes an buchung.", description = "Deletes an buchung by its id.")
     public void delete(@PathParam("id") Long id) {
-        entryService.deleteEntry(id);
+        buchungService.deleteBuchung(id);
     }
 
     @Path("/{id}")
     @PUT
-    @Operation(summary = "Updates an entry.", description = "Updates an entry by its id.")
-    public Entry update(@PathParam("id") Long id, @Valid Entry entry) {
-        return entryService.updateEntry(id, entry);
+    @Operation(summary = "Updates an buchung.", description = "Updates an buchung by its id.")
+    public Buchung update(@PathParam("id") Long id, @Valid Buchung buchung) {
+        return buchungService.updateBuchung(id, buchung);
     }
 
 }
