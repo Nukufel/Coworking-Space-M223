@@ -18,44 +18,44 @@ import javax.ws.rs.core.MediaType;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-import ch.zli.m223.model.Buchung;
-import ch.zli.m223.service.BuchungService;
+import ch.zli.m223.model.Booking;
+import ch.zli.m223.service.BookingService;
 
 @Path("/entries")
 @Tag(name = "Entries", description = "Handling of entries")
 @RolesAllowed({ "User", "Admin" })
-public class BuchungController {
+public class BookingController {
 
     @Inject
-    BuchungService buchungService;
+    BookingService bookingService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Index all entries.", description = "Returns a list of all entries.")
-    public List<Buchung> index() {
-        return buchungService.findAll();
+    public List<Booking> index() {
+        return bookingService.findAll();
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Creates a new buchung.", description = "Creates a new buchung and returns the newly added buchung.")
-    public Buchung create(@Valid Buchung buchung) {
-        return buchungService.createBuchung(buchung);
+    @Operation(summary = "Creates a new booking.", description = "Creates a new booking and returns the newly added booking.")
+    public Booking create(@Valid Booking booking) {
+        return bookingService.createBooking(booking);
     }
 
     @Path("/{id}")
     @DELETE
-    @Operation(summary = "Deletes an buchung.", description = "Deletes an buchung by its id.")
+    @Operation(summary = "Deletes an booking.", description = "Deletes an booking by its id.")
     public void delete(@PathParam("id") Long id) {
-        buchungService.deleteBuchung(id);
+        bookingService.deleteBooking(id);
     }
 
     @Path("/{id}")
     @PUT
-    @Operation(summary = "Updates an buchung.", description = "Updates an buchung by its id.")
-    public Buchung update(@PathParam("id") Long id, @Valid Buchung buchung) {
-        return buchungService.updateBuchung(id, buchung);
+    @Operation(summary = "Updates an booking.", description = "Updates an booking by its id.")
+    public Booking update(@PathParam("id") Long id, @Valid Booking booking) {
+        return bookingService.updateBooking(id, booking);
     }
 
 }

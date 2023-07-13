@@ -2,6 +2,7 @@ package ch.zli.m223.model;
 
 import java.util.Set;
 
+import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,8 +13,11 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity(name = "user_entity")
 @NamedQueries({
@@ -26,7 +30,7 @@ public class User {
   @Schema(readOnly = true)
   private Long id;
   
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false)
   private String email;
 
   @Column(nullable = false)
@@ -39,8 +43,9 @@ public class User {
   private String password;
 
   @OneToMany(mappedBy = "user")
-  @JsonIgnore
-  private Set<Buchung> buchung;
+  @JsonIgnoreProperties("user")
+  @Fetch(FetchMode.JOIN)
+  private Set<Booking> booking;
 
 
 
@@ -60,14 +65,13 @@ public class User {
     this.nachname = nachname;
   }
 
-  public Set<Buchung> getBuchung() {
-    return this.buchung;
+  public Set<Booking> getBooking() {
+    return this.booking;
   }
 
-  public void setBuchung(Set<Buchung> buchung) {
-    this.buchung = buchung;
+  public void setBooking(Set<Booking> booking) {
+    this.booking = booking;
   }
-
 
   public Long getId() {
     return id;

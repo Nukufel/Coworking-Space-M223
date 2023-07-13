@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-public class Buchung {
+public class Booking {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Schema(readOnly = true)
@@ -33,7 +33,7 @@ public class Buchung {
   private String status;
 
   @ManyToOne
-  @JsonIgnore
+  @Fetch(FetchMode.JOIN)
   private User user;
 
 

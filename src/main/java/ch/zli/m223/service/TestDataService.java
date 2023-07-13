@@ -1,9 +1,12 @@
-/*
+
 package ch.zli.m223.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -11,9 +14,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import ch.zli.m223.model.Category;
-import ch.zli.m223.model.Entry;
-import ch.zli.m223.model.Tag;
+import ch.zli.m223.model.Booking;
+import ch.zli.m223.model.User;
 import io.quarkus.arc.profile.IfBuildProfile;
 import io.quarkus.runtime.StartupEvent;
 
@@ -26,53 +28,49 @@ public class TestDataService {
 
   @Transactional
   void generateTestData(@Observes StartupEvent event) {
-    // Categories
-    var projectACategory = new Category();
-    projectACategory.setTitle("Project A");
-    entityManager.persist(projectACategory);
 
-    var projectBCategory = new Category();
-    projectBCategory.setTitle("Project B");
-    entityManager.persist(projectBCategory);
+    Set<Booking> booking = new HashSet<>();
 
-    var projectCCategory = new Category();
-    projectCCategory.setTitle("Project C");
-    entityManager.persist(projectCCategory);
+    // Booking
+    var firstBooking = new Booking();
+    firstBooking.setDate(LocalDate.of(2024, 1, 1));
+    firstBooking.setNachmittag(false);
+    firstBooking.setVormittag(true);
+    firstBooking.setStatus("in bearbeitung");
+    entityManager.persist(firstBooking);
+    
+    var secondBooking = new Booking();
+    secondBooking.setDate(LocalDate.of(2024, 6, 11));
+    secondBooking.setNachmittag(true);
+    secondBooking.setVormittag(true);
+    secondBooking.setStatus("bestätigt");
+    entityManager.persist(secondBooking);
+    
+    var thirdBooking = new Booking();
+    thirdBooking.setDate(LocalDate.of(2020, 6, 11));
+    thirdBooking.setNachmittag(true);
+    thirdBooking.setVormittag(false);
+    thirdBooking.setStatus("abgelent");
+    entityManager.persist(thirdBooking);
+    
+    var fourthBooking = new Booking();
+    fourthBooking.setDate(LocalDate.of(2026, 6, 11));
+    fourthBooking.setNachmittag(false);
+    fourthBooking.setVormittag(false);
+    fourthBooking.setStatus("abgelent");
+    entityManager.persist(fourthBooking);
+    
+    //User
+    var firstUser= new User();
+    firstUser.setEmail("vogeln@bzz.ch");
+    firstUser.setVorname("Niki");
+    firstUser.setNachname("Vogel");
+    firstUser.setPassword("12345");
+    
+    booking.add(firstBooking);
+    booking.add(secondBooking);
 
-    // Tags
-    var programmingTag = new Tag();
-    programmingTag.setTitle("Programming");
-    entityManager.persist(programmingTag);
-
-    var debuggingTag = new Tag();
-    debuggingTag.setTitle("Debugging");
-    entityManager.persist(debuggingTag);
-
-    var meetingTag = new Tag();
-    meetingTag.setTitle("Meeting");
-    entityManager.persist(meetingTag);
-
-    // Entries
-    var firstEntry = new Entry();
-    firstEntry.setCategory(projectACategory);
-    firstEntry.setTags(new HashSet<>(Arrays.asList(programmingTag, debuggingTag)));
-    firstEntry.setCheckIn(LocalDateTime.now().minusHours(3));
-    firstEntry.setCheckOut(LocalDateTime.now().minusHours(2));
-    entityManager.persist(firstEntry);
-
-    var secondEntry = new Entry();
-    secondEntry.setCategory(projectACategory);
-    secondEntry.setTags(new HashSet<>(Arrays.asList(meetingTag)));
-    secondEntry.setCheckIn(LocalDateTime.now().minusHours(2));
-    secondEntry.setCheckOut(LocalDateTime.now().minusHours(1));
-    entityManager.persist(secondEntry);
-
-    var thirdEntry = new Entry();
-    thirdEntry.setCategory(projectBCategory);
-    thirdEntry.setTags(new HashSet<>(Arrays.asList(programmingTag)));
-    thirdEntry.setCheckIn(LocalDateTime.now().minusHours(1));
-    thirdEntry.setCheckOut(LocalDateTime.now());
-    entityManager.persist(thirdEntry);
+    firstUser.setBooking(booking);
+    entityManager.persist(firstUser);
   }
 }
-*/
