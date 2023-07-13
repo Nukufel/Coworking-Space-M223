@@ -1,5 +1,6 @@
 package ch.zli.m223.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -14,11 +15,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import ch.zli.m223.model.Booking;
+import ch.zli.m223.model.User;
 import ch.zli.m223.service.BookingService;
 import io.smallrye.jwt.build.Jwt;
 
@@ -50,8 +53,14 @@ public class BookingController {
     @Path("/delete/{id}")
     @DELETE
     @Operation(summary = "Deletes an booking.", description = "Deletes an booking by its id.")
-    public void delete(@PathParam("id") Long id) {
-        bookingService.deleteBooking(id);
+    public Response delete(@PathParam("id") Long id,Principal principal) {
+        User user = bookingService.findOne(id).getUser();
+        if (principal.getName().equals(user.getEmail()) || user.getRole()) {
+            bookingService.deleteBooking(id);
+            return Response.status(200).build();
+        } else {
+            return Response.status(403).build();
+        }
     }
 
     @Path("/update/{id}")

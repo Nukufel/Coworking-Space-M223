@@ -36,6 +36,8 @@ public class Booking {
   @Fetch(FetchMode.JOIN)
   private User user;
 
+  private String notiz;
+
 
 
   public LocalDate getDate() {
@@ -93,4 +95,14 @@ public class Booking {
   public void setId(Long id) {
     this.id = id;
   }
+
+
+  public String getNotiz() {
+    return this.notiz;
+  }
+
+  public void setNotiz(String notiz) {
+    this.notiz = notiz;
+  }
+
 }

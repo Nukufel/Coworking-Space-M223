@@ -37,6 +37,7 @@ public class TestDataService {
     firstBooking.setNachmittag(false);
     firstBooking.setVormittag(true);
     firstBooking.setStatus("in bearbeitung");
+    firstBooking.setNotiz("hi");
     entityManager.persist(firstBooking);
     
     var secondBooking = new Booking();
@@ -44,6 +45,7 @@ public class TestDataService {
     secondBooking.setNachmittag(true);
     secondBooking.setVormittag(true);
     secondBooking.setStatus("bestätigt");
+    secondBooking.setNotiz("");
     entityManager.persist(secondBooking);
     
     var thirdBooking = new Booking();
