@@ -5,7 +5,7 @@ import io.restassured.http.ContentType;
 
 import org.junit.jupiter.api.Test;
 
-import ch.zli.m223.model.Buchung;
+import ch.zli.m223.model.Booking;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
