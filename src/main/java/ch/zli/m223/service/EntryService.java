@@ -12,28 +12,27 @@ import ch.zli.m223.model.Entry;
 @ApplicationScoped
 public class EntryService {
     @Inject
-    private EntityManager entityManager;
+    EntityManager entityManager;
 
     @Transactional
     public Entry createEntry(Entry entry) {
-        entityManager.persist(entry);
-        return entry;
+        return entityManager.merge(entry);
+    }
+
+    @Transactional
+    public void deleteEntry(Long id) {
+        var entity = entityManager.find(Entry.class, id);
+        entityManager.remove(entity);
+    }
+
+    @Transactional
+    public Entry updateEntry(Long id, Entry entry) {
+        entry.setId(id);
+        return entityManager.merge(entry);
     }
 
     public List<Entry> findAll() {
         var query = entityManager.createQuery("FROM Entry", Entry.class);
         return query.getResultList();
-    }
-
-
-    @Transactional
-    public void delete(long id) {
-      Entry entry = entityManager.find(Entry.class, id);
-      entityManager.remove(entry);
-    }
-
-    @Transactional
-    public void update(Entry entry) {
-        entityManager.merge(entry);
     }
 }

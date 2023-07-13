@@ -1,8 +1,13 @@
 package ch.zli.m223.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.AssertTrue;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -20,12 +25,19 @@ public class Entry {
   @Column(nullable = false)
   private LocalDateTime checkOut;
 
-  @ManyToOne
+  @ManyToOne(optional = false)
+  @Fetch(FetchMode.JOIN)
   private Category category;
 
   @ManyToMany
-  private Set<Tag> tag;
-
+  @JoinTable(
+    name = "entry_tags",
+    joinColumns = @JoinColumn(name = "entry_id"),
+    inverseJoinColumns = @JoinColumn(name = "tag_id")
+  )
+  @JsonIgnoreProperties("entries")
+  @Fetch(FetchMode.JOIN)
+  private Set<Tag> tags;
 
   public Long getId() {
     return id;
@@ -52,18 +64,24 @@ public class Entry {
   }
 
   public Category getCategory() {
-    return this.category;
+    return category;
   }
 
   public void setCategory(Category category) {
     this.category = category;
   }
 
-  public Set<Tag> getTag() {
-    return this.tag;
+  public Set<Tag> getTags() {
+    return tags;
   }
 
-  public void setTag(Set<Tag> tag) {
-    this.tag = tag;
+  public void setTags(Set<Tag> tags) {
+    this.tags = tags;
+  }
+
+  @Schema(hidden = true)
+  @AssertTrue(message = "Check out should be after check in.")
+  private boolean isCheckOutAfterCheckIn() {
+    return this.checkOut.isAfter(this.checkIn);
   }
 }

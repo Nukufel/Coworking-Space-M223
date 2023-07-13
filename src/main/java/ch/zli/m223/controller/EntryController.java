@@ -1,9 +1,10 @@
 package ch.zli.m223.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -22,6 +23,7 @@ import ch.zli.m223.service.EntryService;
 
 @Path("/entries")
 @Tag(name = "Entries", description = "Handling of entries")
+@RolesAllowed({ "User", "Admin" })
 public class EntryController {
 
     @Inject
@@ -29,7 +31,7 @@ public class EntryController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Index all Entries.", description = "Returns a list of all entries.")
+    @Operation(summary = "Index all entries.", description = "Returns a list of all entries.")
     public List<Entry> index() {
         return entryService.findAll();
     }
@@ -38,34 +40,22 @@ public class EntryController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(summary = "Creates a new entry.", description = "Creates a new entry and returns the newly added entry.")
-    public Entry create(Entry entry) {
-       return entryService.createEntry(entry);
+    public Entry create(@Valid Entry entry) {
+        return entryService.createEntry(entry);
     }
 
-
-    @DELETE
     @Path("/{id}")
-    public void deleteEntry(@PathParam("id") long id) {
-        entryService.delete(id);
+    @DELETE
+    @Operation(summary = "Deletes an entry.", description = "Deletes an entry by its id.")
+    public void delete(@PathParam("id") Long id) {
+        entryService.deleteEntry(id);
     }
 
+    @Path("/{id}")
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void updateEntry(Entry entry) {
-        if(dateIsValid(entry)){
-            entryService.update(entry);
-        }
-    }
-
-    public boolean dateIsValid(Entry entry) {
-        if (entry == null) {
-            return true;  // Null values are handled by @NotNull constraint
-        }
-
-        LocalDateTime startDate = entry.getCheckIn();
-        LocalDateTime endDate = entry.getCheckOut();
-
-        return startDate.isBefore(endDate);
+    @Operation(summary = "Updates an entry.", description = "Updates an entry by its id.")
+    public Entry update(@PathParam("id") Long id, @Valid Entry entry) {
+        return entryService.updateEntry(id, entry);
     }
 
 }
