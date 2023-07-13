@@ -15,24 +15,24 @@ public class BookingService {
     EntityManager entityManager;
 
     @Transactional
-    public Booking createBuchung(Booking buchung) {
-        return entityManager.merge(buchung);
+    public Booking createBooking(Booking booking) {
+        return entityManager.merge(booking);
     }
 
     @Transactional
-    public void deleteBuchung(Long id) {
+    public void deleteBooking(Long id) {
         var entity = entityManager.find(Booking.class, id);
         entityManager.remove(entity);
     }
 
     @Transactional
-    public Booking updateBuchung(Long id, Booking buchung) {
-        buchung.setId(id);
-        return entityManager.merge(buchung);
+    public Booking updateBooking(Long id, Booking booking) {
+        booking.setId(id);
+        return entityManager.merge(booking);
     }
 
     public List<Booking> findAll() {
-        var query = entityManager.createQuery("FROM Buchung", Booking.class);
+        var query = entityManager.createQuery("FROM Booking", Booking.class);
         return query.getResultList();
     }
 }
