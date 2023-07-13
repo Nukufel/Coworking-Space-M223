@@ -20,6 +20,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import ch.zli.m223.model.Booking;
 import ch.zli.m223.service.BookingService;
+import io.smallrye.jwt.build.Jwt;
 
 @Path("/booking")
 @Tag(name = "Booking", description = "Handling of bookings")
@@ -42,7 +43,7 @@ public class BookingController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(summary = "Creates a new booking.", description = "Creates a new booking and returns the newly added booking.")
     @Path("/create")
-    public Booking create(@Valid Booking booking) {
+    public Booking create( Booking booking) {
         return bookingService.createBooking(booking);
     }
 
@@ -57,8 +58,15 @@ public class BookingController {
     @PUT
     @RolesAllowed({"Admin"})
     @Operation(summary = "Updates an booking.", description = "Updates an booking by its id.")
-    public Booking update(@PathParam("id") Long id, @Valid Booking booking) {
+    public Booking update(@PathParam("id") Long id, Booking booking) {
         return bookingService.updateBooking(id, booking);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get one booking.", description = "Returns a booking.")
+    @Path("/{id}")
+    public Booking oneBooking(@PathParam("id") Long id) {
+        return bookingService.findOne(id);
+    }
 }

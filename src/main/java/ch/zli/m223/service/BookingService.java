@@ -36,4 +36,8 @@ public class BookingService {
         var query = entityManager.createQuery("FROM Booking", Booking.class);
         return query.getResultList();
     }
+
+        public Booking findOne(Long id) {
+        return entityManager.find(Booking.class, id);
+    }
 }
