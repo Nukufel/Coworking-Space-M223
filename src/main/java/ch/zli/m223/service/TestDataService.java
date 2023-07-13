@@ -29,7 +29,7 @@ public class TestDataService {
   @Transactional
   void generateTestData(@Observes StartupEvent event) {
 
-    Set<Booking> booking = new HashSet<>();
+    //Set<Booking> booking1 = new HashSet<>();
 
     // Booking
     var firstBooking = new Booking();
@@ -60,17 +60,29 @@ public class TestDataService {
     fourthBooking.setStatus("abgelent");
     entityManager.persist(fourthBooking);
     
+    
     //User
+    /*
     var firstUser= new User();
     firstUser.setEmail("vogeln@bzz.ch");
     firstUser.setVorname("Niki");
     firstUser.setNachname("Vogel");
     firstUser.setPassword("12345");
+    firstUser.setRole(true);
     
-    booking.add(firstBooking);
-    booking.add(secondBooking);
+    booking1.add(firstBooking);
+    booking1.add(secondBooking);
 
-    firstUser.setBooking(booking);
+    firstUser.setBooking(booking1);
     entityManager.persist(firstUser);
+
+    var secondUser= new User();
+    secondUser.setEmail("vogeln@bzz.ch");
+    secondUser.setVorname("Niki");
+    secondUser.setNachname("Vogel");
+    secondUser.setPassword("12345");
+    secondUser.setRole(false);
+    entityManager.persist(secondUser);
+    */
   }
 }

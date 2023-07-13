@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import ch.zli.m223.model.Booking;
+import ch.zli.m223.model.User;
 
 @ApplicationScoped
 public class BookingService {

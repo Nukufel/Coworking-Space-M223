@@ -42,6 +42,9 @@ public class User {
   @Column(nullable = false)
   private String password;
 
+  @Column(nullable = false)
+  private boolean role;
+
   @OneToMany(mappedBy = "user")
   @JsonIgnoreProperties("user")
   @Fetch(FetchMode.JOIN)
@@ -96,4 +99,13 @@ public class User {
   public void setPassword(String password) {
     this.password = password;
   }
+
+  public boolean getRole() {
+    return this.role;
+  }
+
+  public void setRole(boolean role) {
+    this.role = role;
+  }
+
 }

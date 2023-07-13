@@ -22,7 +22,7 @@ import ch.zli.m223.model.User;
 import ch.zli.m223.service.UserService;
 
 
-@Path("/users")
+@Path("/user")
 @Tag(name = "Users", description = "Handling of users")
 @RolesAllowed({ "User", "Admin" })
 public class UserController {
@@ -36,6 +36,7 @@ public class UserController {
       summary = "Index all users.", 
       description = "Returns a list of all users."
   )
+  @Path("/all")
   public List<User> index() {
       return userService.findAll();
   }
@@ -48,27 +49,41 @@ public class UserController {
       description = "Creates a new user and returns the newly added user."
   )
   @PermitAll
+  @Path("/create")
   public User create(User user) {
      return userService.createUser(user);
   }
 
-  @Path("/{id}")
+  @Path("/delete/{id}")
   @DELETE
   @Operation(
       summary = "Deletes an user.",
       description = "Deletes an user by its id."
   )
+  @RolesAllowed({"Admin"})
   public void delete(@PathParam("id") Long id) {
       userService.deleteUser(id);
   }
 
-  @Path("/{id}")
+  @Path("/update/{id}")
   @PUT
   @Operation(
       summary = "Updates an user.",
       description = "Updates an user by its id."
   )
+  @RolesAllowed({"Admin"})
   public User update(@PathParam("id") Long id, User user) {
       return userService.updateUser(id, user);
+  }
+
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Operation(
+      summary = "Get one users by id.", 
+      description = "Returns a user."
+  )
+  @Path("/{id}")
+  public User oneUser(@PathParam("id") Long id) {
+      return userService.findOne(id);
   }
 }

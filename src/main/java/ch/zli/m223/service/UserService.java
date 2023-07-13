@@ -44,4 +44,8 @@ public class UserService {
                 .getResultStream()
                 .findFirst();
     }
+    
+    public User findOne(Long id) {
+        return entityManager.find(User.class, id);
+    }
 }
