@@ -17,11 +17,6 @@ public class UserService {
 
     @Transactional
     public User createUser(User user) {
-        if(user.getId() == 1){
-            user.setRole(true);
-        }else{
-            user.setRole(false);
-        }
         return entityManager.merge(user);
     }
 
@@ -38,7 +33,7 @@ public class UserService {
     }
 
     public List<User> findAll() {
-        var query = entityManager.createQuery("FROM User", User.class);
+        var query = entityManager.createQuery("FROM user_entity", User.class);
         return query.getResultList();
     }
 

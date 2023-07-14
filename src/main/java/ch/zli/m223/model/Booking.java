@@ -27,6 +27,7 @@ public class Booking {
   private String status;
 
   @ManyToOne
+  @JoinColumn(name = "userid")
   @Fetch(FetchMode.JOIN)
   private User user;
 

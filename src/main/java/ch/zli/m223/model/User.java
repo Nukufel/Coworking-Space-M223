@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -33,7 +34,8 @@ public class User {
   @Schema(readOnly = true)
   private Long id;
   
-  @Column(nullable = false)
+  
+  @Column(nullable = false, unique = true)
   private String email;
 
   @Column(nullable = false)
@@ -105,7 +107,8 @@ public class User {
   public void setPassword(String password) {
     String salt = BCrypt.gensalt();
     this.salt = salt;
-    this.password = BCrypt.hashpw(password, salt);
+    //this.password = BCrypt.hashpw(password, salt);
+    this.password = password;
   }
 
   public boolean getRole() {
@@ -128,6 +131,4 @@ public class User {
   public void setSalt(String salt) {
     this.salt = salt;
   }
-
-
 }

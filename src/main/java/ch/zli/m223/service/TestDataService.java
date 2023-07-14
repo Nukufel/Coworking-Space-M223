@@ -19,7 +19,7 @@ import ch.zli.m223.model.User;
 import io.quarkus.arc.profile.IfBuildProfile;
 import io.quarkus.runtime.StartupEvent;
 
-@IfBuildProfile("dev")
+@IfBuildProfile("test")
 @ApplicationScoped
 public class TestDataService {
 
@@ -29,7 +29,7 @@ public class TestDataService {
   @Transactional
   void generateTestData(@Observes StartupEvent event) {
 
-    //Set<Booking> booking1 = new HashSet<>();
+    Set<Booking> booking1 = new HashSet<>();
 
     // Booking
     var firstBooking = new Booking();
@@ -63,8 +63,7 @@ public class TestDataService {
     entityManager.persist(fourthBooking);
     
     
-    //User
-    /*
+
     var firstUser= new User();
     firstUser.setEmail("vogeln@bzz.ch");
     firstUser.setVorname("Niki");
@@ -79,12 +78,11 @@ public class TestDataService {
     entityManager.persist(firstUser);
 
     var secondUser= new User();
-    secondUser.setEmail("vogeln@bzz.ch");
+    secondUser.setEmail("vogeln@bzzi.ch");
     secondUser.setVorname("Niki");
     secondUser.setNachname("Vogel");
     secondUser.setPassword("12345");
     secondUser.setRole(false);
     entityManager.persist(secondUser);
-    */
   }
 }

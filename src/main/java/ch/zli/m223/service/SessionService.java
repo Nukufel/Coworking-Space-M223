@@ -24,9 +24,9 @@ public class SessionService {
 
   public Response authenticate(Credential credential) {
     Optional<User> principal = userService.findByEmail(credential.getEmail());
-
+//BCrypt.hashpw(credential.getPassword(),principal.get().getSalt())
     try {
-      if (principal.isPresent() && principal.get().getPassword().equals(BCrypt.hashpw(credential.getPassword(),principal.get().getSalt()))) {
+      if (principal.isPresent() && principal.get().getPassword().equals(credential.getPassword())) {
         String token = Jwt
             .issuer("https://zli.example.com/")
             .upn(credential.getEmail())
@@ -35,7 +35,7 @@ public class SessionService {
             .sign();
         return Response
             .ok(principal.get())
-            .cookie(new NewCookie("punchclock", token))
+            .cookie(new NewCookie("coworkingspace", token))
             .header("Authorization", "Bearer " + token)
             .build();
       }

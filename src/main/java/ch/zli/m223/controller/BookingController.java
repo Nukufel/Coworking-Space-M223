@@ -3,6 +3,7 @@ package ch.zli.m223.controller;
 import java.security.Principal;
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -40,6 +41,7 @@ public class BookingController {
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Index all booking.", description = "Returns a list of all booking.")
     @Path("/list")
+    @PermitAll
     public List<Booking> list() {
         return bookingService.findAll();
     }

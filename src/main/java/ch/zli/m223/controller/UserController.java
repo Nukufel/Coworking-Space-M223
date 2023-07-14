@@ -54,9 +54,15 @@ public class UserController {
   @PermitAll
   @Path("/create")
   public User create(User user) {
+    if(userService.findAll().size() < 1){
+        user.setRole(true);
+    }else{
+        user.setRole(false);
+    }
      return userService.createUser(user);
   }
-  @Context SecurityContext c
+
+  @Path("/delete/{id}")
   @Operation(
       summary = "Deletes an user.",
       description = "Deletes an user by its id."
