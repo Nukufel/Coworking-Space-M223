@@ -2,6 +2,7 @@ package ch.zli.m223.model;
 
 import java.util.Set;
 
+import org.mindrot.jbcrypt.BCrypt;
 import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +26,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 })
 public class User {
 
+  
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Schema(readOnly = true)
@@ -44,6 +47,9 @@ public class User {
 
   @Column(nullable = false)
   private boolean role;
+
+  @Column(nullable = false)
+  private String salt;
 
   @OneToMany(mappedBy = "user")
   @JsonIgnoreProperties("user")
@@ -97,7 +103,9 @@ public class User {
   }
 
   public void setPassword(String password) {
-    this.password = password;
+    String salt = BCrypt.gensalt();
+    this.salt = salt;
+    this.password = BCrypt.hashpw(password, salt);
   }
 
   public boolean getRole() {
@@ -107,5 +115,19 @@ public class User {
   public void setRole(boolean role) {
     this.role = role;
   }
+
+
+  public boolean isRole() {
+    return this.role;
+  }
+
+  public String getSalt() {
+    return this.salt;
+  }
+
+  public void setSalt(String salt) {
+    this.salt = salt;
+  }
+
 
 }

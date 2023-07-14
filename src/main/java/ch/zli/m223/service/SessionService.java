@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import ch.zli.m223.model.User;
 import ch.zli.m223.model.Credential;
 import io.smallrye.jwt.build.Jwt;
@@ -24,7 +26,7 @@ public class SessionService {
     Optional<User> principal = userService.findByEmail(credential.getEmail());
 
     try {
-      if (principal.isPresent() && principal.get().getPassword().equals(credential.getPassword())) {
+      if (principal.isPresent() && principal.get().getPassword().equals(BCrypt.hashpw(credential.getPassword(),principal.get().getSalt()))) {
         String token = Jwt
             .issuer("https://zli.example.com/")
             .upn(credential.getEmail())
@@ -40,6 +42,8 @@ public class SessionService {
     } catch (Exception e) {
       System.err.println("Couldn't validate password.");
     }
+
+    
 
     return Response.status(Response.Status.FORBIDDEN).build();
   }

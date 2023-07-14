@@ -14,8 +14,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
@@ -54,16 +56,14 @@ public class UserController {
   public User create(User user) {
      return userService.createUser(user);
   }
-
-  @Path("/delete/{id}")
-  @DELETE
+  @Context SecurityContext c
   @Operation(
       summary = "Deletes an user.",
       description = "Deletes an user by its id."
   )
-  @RolesAllowed({"Admin"})
-  public Response delete(@PathParam("id") Long id, Principal principal) {
-      if (((User) principal).getRole()) {
+  @RolesAllowed("Admin")
+  public Response delete(@PathParam("id") Long id, @Context SecurityContext ctx) {
+      if (userService.findByEmail(ctx.getUserPrincipal().getName()).get().getRole()) {
             userService.deleteUser(id);
             return Response.status(200).build();
         } else {
@@ -78,13 +78,14 @@ public class UserController {
       description = "Updates an user by its id."
   )
   @RolesAllowed({"Admin"})
-  public Response update(@PathParam("id") Long id, User user, Principal principal) {
-        if (((User) principal).getRole()) {
+  public Response update(@PathParam("id") Long id, @Context SecurityContext ctx, User user) {
+        if (userService.findByEmail(ctx.getUserPrincipal().getName()).get().getRole()) {
             return Response.status(200).entity(userService.updateUser(id, user)).build();
         } else {
             return Response.status(403).build();
         }
   }
+
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)

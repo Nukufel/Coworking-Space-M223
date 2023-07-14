@@ -17,6 +17,11 @@ public class UserService {
 
     @Transactional
     public User createUser(User user) {
+        if(user.getId() == 1){
+            user.setRole(true);
+        }else{
+            user.setRole(false);
+        }
         return entityManager.merge(user);
     }
 

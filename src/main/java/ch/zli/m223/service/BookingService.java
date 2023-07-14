@@ -12,6 +12,7 @@ import ch.zli.m223.model.User;
 
 @ApplicationScoped
 public class BookingService {
+    
     @Inject
     EntityManager entityManager;
 
