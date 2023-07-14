@@ -35,3 +35,7 @@ Die Daten werden in einer PostgreSQL-Datenbank gespeichert. In der Entwicklungsu
 
 Die automatischen Tests können mit `./mvnw quarkus:test` ausgeführt werden. Für die automatischen Tests wird nicht die PostgreSQL-Datenbank verwendet, sondern eine H2-Datenbank, welche sich im Arbeitsspeicher während der Ausführung befindet.
 Die Testdaten befinden sich in src/main/java/ch/zli/m223/service/TestDataService.java
+
+## Thunderbird
+
+Um das Projekt mit Thunderbird zu testen müssen die ersten 3 Testfälle (create, loginUser und loginAdmin) ausgefürtwerden. von diesen kann man dann die Tokens nehmen um die restlichen auszuführen.
