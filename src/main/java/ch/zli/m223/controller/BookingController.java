@@ -27,7 +27,6 @@ import io.smallrye.jwt.build.Jwt;
 
 @Path("/booking")
 @Tag(name = "Booking", description = "Handling of bookings")
-@RolesAllowed({"Admin", "User"})
 public class BookingController {
 
     @Inject
@@ -46,16 +45,22 @@ public class BookingController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(summary = "Creates a new booking.", description = "Creates a new booking and returns the newly added booking.")
     @Path("/create")
-    public Booking create( Booking booking) {
-        return bookingService.createBooking(booking);
+    public Response create( Booking booking, Principal principal) {
+        User user = bookingService.findOne(booking.getId()).getUser();
+        if (principal.getName().equals(user.getEmail()) || ((User) principal).getRole()) {
+            return Response.status(200).entity(bookingService.createBooking(booking)).build();
+        } else {
+            return Response.status(403).build();
+        }
     }
 
     @Path("/delete/{id}")
     @DELETE
     @Operation(summary = "Deletes an booking.", description = "Deletes an booking by its id.")
-    public Response delete(@PathParam("id") Long id,Principal principal) {
+    public Response delete(@PathParam("id") Long id, Principal principal) {
         User user = bookingService.findOne(id).getUser();
-        if (principal.getName().equals(user.getEmail()) || user.getRole()) {
+    
+        if (principal.getName().equals(user.getEmail()) || ((User) principal).getRole()) {
             bookingService.deleteBooking(id);
             return Response.status(200).build();
         } else {
@@ -67,8 +72,13 @@ public class BookingController {
     @PUT
     @RolesAllowed({"Admin"})
     @Operation(summary = "Updates an booking.", description = "Updates an booking by its id.")
-    public Booking update(@PathParam("id") Long id, Booking booking) {
-        return bookingService.updateBooking(id, booking);
+    public Response update(@PathParam("id") Long id, Booking booking, Principal principal) {
+        
+        if (((User) principal).getRole()) {
+            return Response.status(200).entity(bookingService.updateBooking(id, booking)).build();
+        } else {
+            return Response.status(403).build();
+        }
     }
 
     @GET

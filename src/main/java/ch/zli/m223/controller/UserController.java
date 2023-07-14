@@ -1,5 +1,6 @@
 package ch.zli.m223.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
@@ -14,6 +15,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
@@ -24,7 +26,6 @@ import ch.zli.m223.service.UserService;
 
 @Path("/user")
 @Tag(name = "Users", description = "Handling of users")
-@RolesAllowed({ "User", "Admin" })
 public class UserController {
   
   @Inject
@@ -61,8 +62,13 @@ public class UserController {
       description = "Deletes an user by its id."
   )
   @RolesAllowed({"Admin"})
-  public void delete(@PathParam("id") Long id) {
-      userService.deleteUser(id);
+  public Response delete(@PathParam("id") Long id, Principal principal) {
+      if (((User) principal).getRole()) {
+            userService.deleteUser(id);
+            return Response.status(200).build();
+        } else {
+            return Response.status(403).build();
+        }
   }
 
   @Path("/update/{id}")
@@ -72,8 +78,12 @@ public class UserController {
       description = "Updates an user by its id."
   )
   @RolesAllowed({"Admin"})
-  public User update(@PathParam("id") Long id, User user) {
-      return userService.updateUser(id, user);
+  public Response update(@PathParam("id") Long id, User user, Principal principal) {
+        if (((User) principal).getRole()) {
+            return Response.status(200).entity(userService.updateUser(id, user)).build();
+        } else {
+            return Response.status(403).build();
+        }
   }
 
   @GET
